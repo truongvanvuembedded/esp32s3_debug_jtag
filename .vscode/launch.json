@@ -1,0 +1,33 @@
+{
+  // Debug ESP32-S3 qua USB-JTAG tich hop, dung extension ESP-IDF cho VS Code.
+  // Dat file nay vao thu muc .vscode/ cua project.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Cau hinh day du: task "OpenOCD: start" (.vscode/tasks.json) tu khoi dong
+      // OpenOCD, GDB ket noi vao chip va dung tai dau ham app_main().
+      "type": "gdbtarget",
+      "request": "attach",
+      "name": "ESP32-S3: Debug qua USB-JTAG",
+      "preLaunchTask": "OpenOCD: start",
+      "postDebugTask": "OpenOCD: stop",
+      "program": "${workspaceFolder}/build/${command:espIdf.getProjectName}.elf",
+      "gdb": "${command:espIdf.getToolchainGdb}",
+      "initCommands": [
+        // ESP32-S3 chi co 2 hardware watchpoint
+        "set remote hardware-watchpoint-limit 2",
+        // Reset chip va dung lai de bat dau debug tu dau
+        "mon reset halt",
+        "maintenance flush register-cache",
+        // Breakpoint tam thoi tai app_main (xoa dong nay neu khong muon dung o day)
+        "thb app_main"
+      ],
+      "target": {
+        "connectCommands": [
+          "set remotetimeout 20",
+          "-target-select extended-remote localhost:3333"
+        ]
+      }
+    },
+  ]
+}

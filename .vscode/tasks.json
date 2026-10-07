@@ -1,0 +1,46 @@
+{
+  // Task phuc vu debug: launch.json goi "OpenOCD: start" truoc khi debug
+  // va "OpenOCD: stop" sau khi ket thuc phien debug.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "OpenOCD: start",
+      "type": "process",
+      // Duong dan day du vi openocd khong nam trong PATH
+      "command": "C:\\Espressif\\tools\\openocd-esp32\\v0.12.0-esp32-20260703\\openocd-esp32\\bin\\openocd.exe",
+      "args": ["-f", "board/esp32-wrover-kit-3.3v.cfg"],
+      "isBackground": true,
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": {
+        "owner": "openocd",
+        // Pattern gia (khong bao gio khop); chi can phan "background" ben duoi
+        "pattern": {
+          "regexp": "^__khong_khop__(.*)__(.*)$",
+          "file": 1,
+          "message": 2
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Open On-Chip Debugger",
+          // VS Code doi dong nay roi moi cho GDB ket noi
+          "endsPattern": "Listening on port \\d+ for gdb connections"
+        }
+      }
+    },
+    {
+      "label": "OpenOCD: stop",
+      "type": "process",
+      "command": "taskkill",
+      "args": ["/F", "/IM", "openocd.exe"],
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
