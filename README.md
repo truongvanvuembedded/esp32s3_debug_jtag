@@ -101,8 +101,18 @@ idf.py -p COMx flash monitor
 
 **In VS Code:** [.vscode/settings.json](.vscode/settings.json) already sets
 `idf.openOcdConfigs = board/esp32s3-builtin.cfg`, and [.vscode/launch.json](.vscode/launch.json)
-contains the `Eclipse CDT GDB Adapter` configuration. Press `F5` — the ESP-IDF extension starts
-OpenOCD and attaches GDB to the chip.
+contains the `ESP32-S3: Debug qua USB-JTAG` configuration. It starts OpenOCD through the
+`OpenOCD: start` task, attaches GDB to the chip, resets it and stops at `app_main()`.
+
+1. Open the **Run and Debug** view, select `ESP32-S3: Debug qua USB-JTAG` and press the green
+   start button (or `F5`).
+
+   ![Run and Debug view with the ESP32-S3 debug configuration selected](img/run_and_debug.png)
+
+2. The session halts on the temporary breakpoint at `app_main()`. From here you can step through
+   the code and inspect local variables, CPU registers and the call stack of every FreeRTOS task.
+
+   ![VS Code paused on the breakpoint at app_main with variables, registers and call stack](img/vscode_debug_screen.png)
 
 ## Notes
 
